@@ -60,10 +60,23 @@ class Nouvelle {
             // Pas d'image
             $this->urlImage = "";
           }
+          $this->downloadImage($item,5);
     }
 
     function downloadImage(DOMElement $item, $imageId) {
-        
+        // On suppose que $node est un objet sur le noeud 'enclosure' d'un flux RSS
+        // On tente d'accéder à l'attribut 'url'
+        $urlImageNodeList = $item->getElementsByTagName("enclosure")->item(0)->attributes->getNamedItem('url');
+        if ($urlImageNodeList != NULL) {
+            // L'attribut url a été trouvé : on récupère sa valeur, c'est l'URL de l'image
+            $url = $urlImageNodeList->nodeValue;
+            // On construit un nom local pour cette image : on suppose que $nomLocalImage contient un identifiant unique
+            // On suppose que le dossier images existe déjà
+            $imagePath = 'images/'.$imageId++.'.jpg'; // Pas besoin de "this"
+            $file = file_get_contents($url);
+            // Écrit le résultat dans le fichier
+            file_put_contents($imagePath, $file);
+        }
     }
 }
 
