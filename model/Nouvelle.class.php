@@ -54,11 +54,11 @@ class Nouvelle {
 
         $urlImageNodeList = $item->getElementsByTagName('enclosure');
         if($urlImageNodeList->length != 0) {
-            $urlImageNodeList = $urlImageNodeList->item(1);
-            $this->urlImage = $urlNodeList->textContent;
+            $urlImageNodeList = $urlImageNodeList->item(0)->attributes->getNamedItem("url")->nodeValue;
+            $this->urlImage = $urlImageNodeList;
           } else {
             // Pas d'image
-            $this->image = "";
+            $this->urlImage = "";
           }
     }
 }

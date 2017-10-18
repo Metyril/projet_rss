@@ -14,5 +14,6 @@
       foreach($rss->getNouvelles() as $nouvelle) {
         echo ' '.$nouvelle->getTitre().' '.$nouvelle->getDate()."<br>";
         echo '  '.$nouvelle->getDescription()."<br>";
+        echo '<img src='.$nouvelle->getUrlImage().'><br>';
       }
 ?>
