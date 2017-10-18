@@ -61,6 +61,10 @@ class Nouvelle {
             $this->urlImage = "";
           }
     }
+
+    function downloadImage(DOMElement $item, $imageId) {
+        
+    }
 }
 
 ?>
