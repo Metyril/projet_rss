@@ -1,6 +1,7 @@
 <?php
 
 class Nouvelle {
+    static $id;      // L'identifiant de la nouvelle
     private $titre;   // Le titre
     private $date;    // Date de publication
     private $description; // Contenu de la nouvelle
@@ -8,6 +9,11 @@ class Nouvelle {
     private $urlImage;    // URL vers l'image
 
     function __construct() {
+        if (self::$id == null) {
+            self::$id = 1;
+        } else {
+            self::$id ++;
+        }
     }
 
     // Fonctions getter
@@ -30,6 +36,10 @@ class Nouvelle {
 
     function getUrlImage() {
         return $this->urlImage;
+    }
+
+    function staticValue() {
+        return self::$id;
     }
 
     // Charge les attributs de la nouvelle avec les informations du noeud XML
@@ -60,7 +70,9 @@ class Nouvelle {
             // Pas d'image
             $this->urlImage = "";
           }
-          $this->downloadImage($item,5);
+          var_dump(self::$id);
+          
+          $this->downloadImage($item,self::$id);
     }
 
     function downloadImage(DOMElement $item, $imageId) {
