@@ -37,10 +37,6 @@ class DAO {
         }
         // Acces à un objet RSS à partir de son URL
         function readRSSfromURL($url) {
-            //$q = $this->db->prepare("SELECT * FROM RSS WHERE url='$url'");// var_dump("SELECT * FROM RSS WHERE url = '$url'");
-            //$r = $q->execute(); var_dump($q); var_dump($r);
-            //$r = $this->db->exec("SELECT * FROM RSS WHERE url='$url'");
-            //$result = $r->fetchAll(PDO::FETCH_CLASS,"RSS"); var_dump($result);
             $req = "SELECT * FROM RSS WHERE url='$url'";
             $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
             $tab = $sth->fetchAll(PDO::FETCH_CLASS,"RSS");
