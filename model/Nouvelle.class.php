@@ -70,7 +70,7 @@ class Nouvelle {
             // Pas d'image
             $this->urlImage = "";
           }
-          var_dump(self::$id);
+          //var_dump(self::$id);
           
           $this->downloadImage($item,self::$id);
     }

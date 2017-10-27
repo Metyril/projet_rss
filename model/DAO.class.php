@@ -5,7 +5,7 @@ class DAO {
         private $db; // L'objet de la base de donnée
         // Ouverture de la base de donnée
         function __construct() {
-          $dsn = 'sqlite:data/rss.db'; // Data source name
+          $dsn = 'sqlite:../model/data/rss.db'; // Data source name
           try {
             $this->db = new PDO($dsn);
           } catch (PDOException $e) {
@@ -40,9 +40,11 @@ class DAO {
             $req = "SELECT * FROM RSS WHERE url='$url'";
             $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
             $tab = $sth->fetchAll(PDO::FETCH_CLASS,"RSS");
-            $rss = new RSS();
-            $rss->setUrl($url);
-            return $tab[0];
+            if (array_filter($tab)) {
+              return $tab[0];
+            } else {
+              return NULL;              
+            }
         }
         // Met à jour un flux
         function updateRSS(RSS $rss) {
