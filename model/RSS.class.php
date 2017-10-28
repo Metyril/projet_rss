@@ -33,9 +33,13 @@
         //Telecharge le fichier XML dans $rss
         $doc->load($this->url);
         // Recupère la liste (DOMNodeList) de tous les elements de l'arbre 'title'
-        $nodeList = $doc->getElementsByTagName('title');
+        $titleNodeList = $doc->getElementsByTagName('title');
         // Met à jour le titre dans l'objet
-        $this->titre = $nodeList->item(0)->textContent;
+        $this->titre = $titleNodeList->item(0)->textContent;
+        // Recupère la liste (DOMNodeList) de tous les elements de l'arbre 'title'
+        $titleNodeList = $doc->getElementsByTagName('pubDate');
+        // Met à jour le titre dans l'objet
+        $this->date = $titleNodeList->item(0)->textContent;
         // Récupère tous les items du flux RSS
         foreach ($doc->getElementsByTagName('item') as $node) {
           // Création d'un objet Nouvelle à conserver dans la liste $this->nouvelles

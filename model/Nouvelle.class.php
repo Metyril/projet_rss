@@ -1,22 +1,31 @@
 <?php
 
 class Nouvelle {
-    static $id;      // L'identifiant de la nouvelle
+    private $id;      // L'identifiant de la nouvelle
     private $titre;   // Le titre
     private $date;    // Date de publication
     private $description; // Contenu de la nouvelle
     private $url;         // Le lien vers la ressource associée à la nouvelle
-    private $urlImage;    // URL vers l'image
+    private $image;    // URL vers l'image
+    static $imageId;
 
     function __construct() {
-        if (self::$id == null) {
-            self::$id = 1;
+        if (self::$imageId == null) {
+            self::$imageId = 1;
         } else {
-            self::$id ++;
+            self::$imageId ++;
         }
     }
 
     // Fonctions getter
+
+    function getId() {
+        return $this->id;
+    }
+
+    function setId($id) {
+        $this->id = $id;
+    }
 
     function getTitre() {
         return $this->titre;
@@ -35,11 +44,11 @@ class Nouvelle {
     }
 
     function getUrlImage() {
-        return $this->urlImage;
+        return $this->image;
     }
 
     function staticValue() {
-        return self::$id;
+        return self::$imageId;
     }
 
     // Charge les attributs de la nouvelle avec les informations du noeud XML
@@ -65,14 +74,13 @@ class Nouvelle {
         $urlImageNodeList = $item->getElementsByTagName('enclosure');
         if($urlImageNodeList->length != 0) {
             $urlImageNodeList = $urlImageNodeList->item(0)->attributes->getNamedItem("url")->nodeValue;
-            $this->urlImage = $urlImageNodeList;
+            $this->image = $urlImageNodeList;
           } else {
             // Pas d'image
             $this->urlImage = "";
           }
-          //var_dump(self::$id);
           
-          $this->downloadImage($item,self::$id);
+          $this->downloadImage($item,self::$imageId);
     }
 
     function downloadImage(DOMElement $item, $imageId) {
@@ -84,7 +92,7 @@ class Nouvelle {
             $url = $urlImageNodeList->nodeValue;
             // On construit un nom local pour cette image : on suppose que $nomLocalImage contient un identifiant unique
             // On suppose que le dossier images existe déjà
-            $imagePath = 'images/'.$imageId++.'.jpg'; // Pas besoin de "this"
+            $imagePath = '../model/images/'.$imageId++.'.jpg'; // Pas besoin de "this"
             $file = file_get_contents($url);
             // Écrit le résultat dans le fichier
             file_put_contents($imagePath, $file);

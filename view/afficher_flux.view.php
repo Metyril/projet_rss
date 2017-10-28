@@ -7,7 +7,11 @@
 
 <body>
     <?php foreach($fluxs as $f) { ?>
-    <a href=<?php echo $f->getUrl()?>><?php echo $f->getUrl()?></a> <br>
+    <p>
+        <?php echo $f->getTitre();?>
+        <a href="afficher_nouvelles.ctrl.php?fluxId=<?php echo $f->getId();?>">Affichage textuel</a>
+        <a href="afficher_nouvelles_img.ctrl.php?fluxId=<?php echo $f->getId();?>">Grille d'images</a>
+    </p>
     <?php } ?>
 </body>
 </html>

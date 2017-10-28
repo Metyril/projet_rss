@@ -7,7 +7,7 @@
 
 <body>
     <?php foreach($listeNouvelles as $nouvelles) { ?>
-        <a href="afficher_nouvelle.ctrl.php?nouvelleId=<?php echo $nouvelles->getId();?>"><?php echo $nouvelles->getTitre();?></a> <br>
+        <a href="afficher_nouvelle.ctrl.php?nouvelleId=<?php echo $nouvelles->getId();?>"><img src=<?php echo $nouvelles->getUrlImage();?>></a>
     <?php } ?>
 </body>
 </html>

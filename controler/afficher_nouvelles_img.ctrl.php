@@ -9,6 +9,6 @@
     
     $listeNouvelles = $rss->listeNouvelles($fluxId);
 
-    include("../view/afficher_nouvelles.view.php");
+    include("../view/afficher_nouvelles_img.view.php");
 
 ?>
