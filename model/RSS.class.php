@@ -6,6 +6,7 @@
       private $url;   // Chemin URL pour télécharger un nouvel état du flux
       private $date;  // Date du dernier téléchargement du flux
       private $nouvelles; // Liste des nouvelles du flux dans un tableau d'objets Nouvelle
+      private $dateMaj;
 
       // Fonctions getter
       function setUrl($url) {
@@ -25,6 +26,9 @@
       }
       function getNouvelles() {
         return $this->nouvelles;
+      }
+      function getDateMaj() {
+        return $this->dateMaj;
       }
       // Récupère un flux à partir de son URL
       function update() {
@@ -48,6 +52,8 @@
           $nouvelle->update($node);
           //var_dump($nouvelle);
           $this->nouvelles[] = $nouvelle;
+
+          $this->dateMaj = time();
         }
         //var_dump($nouvelles);
       }

@@ -8,7 +8,6 @@
     }
     if (isset($_GET['mode'])) {
         $mode = $_GET['mode'];
-        var_dump($mode);
     }
     
     $listeNouvelles = $rss->listeNouvelles($fluxId);
