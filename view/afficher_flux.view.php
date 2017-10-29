@@ -6,11 +6,19 @@
 </head>
 
 <body>
+    <header>
+        <h1>Acceuil</h1>
+    </header>
+
+    <ul id="navigation">
+        <li>Liste des fluxs</li>
+    </ul>
+
     <?php foreach($fluxs as $f) { ?>
     <p>
         <?php echo $f->getTitre();?>
-        <a href="afficher_nouvelles.ctrl.php?fluxId=<?php echo $f->getId();?>">Affichage textuel</a>
-        <a href="afficher_nouvelles_img.ctrl.php?fluxId=<?php echo $f->getId();?>">Grille d'images</a>
+        <a href="afficher_nouvelles.ctrl.php?mode=text&fluxId=<?php echo $f->getId();?>">Affichage textuel</a>
+        <a href="afficher_nouvelles.ctrl.php?mode=img&fluxId=<?php echo $f->getId();?>">Grille d'images</a>
     </p>
     <?php } ?>
 </body>

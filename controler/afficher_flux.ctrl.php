@@ -3,7 +3,7 @@
     $dao = new DAO();
 
 $url[] = "http://www.lemonde.fr/m-actu/rss_full.xml";
-$url[] = "http://www.lemonde.fr/rss/une.xml";
+//$url[] = "http://www.lemonde.fr/rss/une.xml";
 $url[] = "http://www.lemonde.fr/enseignement-superieur/rss_full.xml";
 
 $dao->reinit();
