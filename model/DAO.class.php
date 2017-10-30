@@ -62,6 +62,14 @@
       }
     }
 
+    function deleteRSS($RSS_id) {
+      $req1 = "DELETE FROM RSS WHERE id='$RSS_id'";
+      $sth1 = $this->db->exec($req1) or die (print_r($this->db->errorInfo()));
+
+      $req2 = "DELETE FROM sqlite_sequence WHERE name='RSS'";
+      $sth2 = $this->db->exec($req2) or die (print_r($this->db->errorInfo()));
+    }
+
     //////////////////////////////////////////////////////////
     // Methodes CRUD sur Nouvelle
     //////////////////////////////////////////////////////////
@@ -69,7 +77,7 @@
     function readNouvellefromTitre($titre,$RSS_id) {
       $req = "SELECT * FROM nouvelle where titre = '$titre' and RSS_id = '$RSS_id'";
       $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
-      $result = $sth->fetchAll(PDO::FETCH_CLASS,"Nouvelle");
+      $result = $sth->fetchAll(PDO::FETCH_CLASS| PDO::FETCH_PROPS_LATE,"Nouvelle", array('RSS_id'));
       if (array_filter($result)) {
         return $result[0];
       } else {
@@ -82,10 +90,14 @@
       $nouvelle = $this->readNouvellefromTitre($n->getTitre(), $RSS_id);
       if ($nouvelle == NULL) {
         try {
-          $q = "INSERT INTO nouvelle (titre) VALUES ('".$n->getTitre()."')";
-          $r = $this->db->exec($q);
+          /*$q = "INSERT INTO nouvelle (titre) VALUES ('".$n->getTitre()."')";
+          $r = $this->db->exec($q);*/
+
+          $req = "INSERT INTO nouvelle (titre, RSS_id) VALUES ('".$n->getTitre()."', '$RSS_id')";
+          $sth = $this->db->exec($req);
+
           //return $n;
-          if ($r == 0) {
+          if ($sth == 0) {
             die("createNouvelle error: no nouvelle inserted\n");
           }
         } catch (PDOException $e) {
@@ -97,7 +109,7 @@
     function updateNouvelle(Nouvelle $n, $RSS_id) {
       $desc = $this->db->quote($n->getDescription());
       $titre = $this->db->quote($n->getTitre());
-      $q = "UPDATE nouvelle SET description=$desc, date='".$n->getDate()."', url='".$n->getUrl()."', image='".$n->getUrlImage()."', RSS_id=$RSS_id WHERE titre=$titre";
+      $q = "UPDATE nouvelle SET description=$desc, date='".$n->getDate()."', url='".$n->getUrl()."', image='".$n->getUrlImage()."' WHERE titre=$titre AND RSS_id=$RSS_id";
       try {
         $r = $this->db->exec($q);
         if ($r == 0) {
@@ -106,6 +118,14 @@
       } catch (PDOException $e) {
         die("PDO Error :".$e->getMessage());
       }
+    }
+
+    function deleteListeNouvelles($RSS_id) {
+      $req1 = "DELETE FROM nouvelle WHERE RSS_id='$RSS_id'";
+      $sth1 = $this->db->exec($req1) or die (print_r($this->db->errorInfo()));
+
+      $req2 = "DELETE FROM sqlite_sequence WHERE name='nouvelle'";
+      $sth2 = $this->db->exec($req2) or die (print_r($this->db->errorInfo()));
     }
 
 
@@ -118,7 +138,7 @@
       $q2 = "DELETE FROM nouvelle WHERE id>0";
       $r2 = $this->db->exec($q2);
   
-      $q3 = "DELETE FROM sqlite_sequence WHERE name='RSS';";
+      $q3 = "DELETE FROM sqlite_sequence WHERE name='RSS'";
       $r3 = $this->db->exec($q3);
   
       $q4 = "DELETE FROM sqlite_sequence WHERE name='nouvelle'";
@@ -128,7 +148,7 @@
     function listeNouvelles($RSS_id) {
       $req = "SELECT * FROM nouvelle where RSS_id = '$RSS_id'";
       $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
-      $result = $sth->fetchAll(PDO::FETCH_CLASS,"Nouvelle");
+      $result = $sth->fetchAll(PDO::FETCH_CLASS| PDO::FETCH_PROPS_LATE,"Nouvelle", array('RSS_id'));
       if (array_filter($result)) {
         return $result;
       } else {
@@ -136,12 +156,34 @@
       }
     }
 
-    function lireNouvelle($id) {
-      $req = "SELECT * FROM nouvelle where id = '$id'";
+    function lireNouvelle($id, $RSS_id) {
+      $req = "SELECT * FROM nouvelle where id = '$id' and RSS_id='$RSS_id'";
       $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
-      $result = $sth->fetchAll(PDO::FETCH_CLASS,"Nouvelle");
+      $result = $sth->fetchAll(PDO::FETCH_CLASS| PDO::FETCH_PROPS_LATE,"Nouvelle", array('RSS_id'));
       if (array_filter($result)) {
         return $result[0];
+      } else {
+        return NULL;              
+      }
+    }
+
+    function lireRSS($RSS_id) {
+      $req = "SELECT * FROM RSS where id = '$RSS_id'";
+      $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
+      $result = $sth->fetchAll(PDO::FETCH_CLASS, "RSS");
+      if (array_filter($result)) {
+        return $result[0];
+      } else {
+        return NULL;              
+      }
+    }
+
+    function listeUrl() {
+      $req = "SELECT url FROM RSS";
+      $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
+      $result = $sth->fetchAll(PDO::FETCH_COLUMN);
+      if (array_filter($result)) {
+        return $result;
       } else {
         return NULL;              
       }

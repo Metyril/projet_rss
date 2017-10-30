@@ -7,9 +7,11 @@ class Nouvelle {
     private $description; // Contenu de la nouvelle
     private $url;         // Le lien vers la ressource associée à la nouvelle
     private $image;    // URL vers l'image
+    private $RSS_id;
     static $imageId;
 
-    function __construct() {
+    function __construct($RSS_id) {
+        $this->setRssId($RSS_id);
         if (self::$imageId == null) {
             self::$imageId = 1;
         } else {
@@ -23,8 +25,12 @@ class Nouvelle {
         return $this->id;
     }
 
-    function setId($id) {
-        $this->id = $id;
+    function getRssId() {
+        return $this->RSS_id;
+    }
+
+    function setRssId($RSS_id) {
+        $this->RSS_id = $RSS_id;
     }
 
     function getTitre() {
@@ -79,7 +85,8 @@ class Nouvelle {
             // Pas d'image
             $this->urlImage = "";
           }
-          
+
+          //var_dump(self::$imageId);
           $this->downloadImage($item,self::$imageId);
     }
 

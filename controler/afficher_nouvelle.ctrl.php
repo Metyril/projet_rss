@@ -13,7 +13,7 @@
         $mode = $_GET['mode'];
     }
     
-    $nouvelle = $rss->lireNouvelle($nouvelleId);
+    $nouvelle = $rss->lireNouvelle($nouvelleId, $fluxId);
 
     include("../view/afficher_nouvelle.view.php");
 

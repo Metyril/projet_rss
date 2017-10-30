@@ -16,8 +16,8 @@
         Chercher un mot-clé :
         <input type="hidden" name="mode" value="<?php echo $mode?>"/>
         <input type="hidden" name="fluxId" value="<?php echo $fluxId?>"/>
-        <input type="textfield" name="search"/>
-        <input type = "submit" value = "Rechercher"  />
+        <input type="search" name="search"/>
+        <input type="submit" value="Rechercher"/>
     </form>
 
 

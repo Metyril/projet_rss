@@ -47,13 +47,13 @@
         // Récupère tous les items du flux RSS
         foreach ($doc->getElementsByTagName('item') as $node) {
           // Création d'un objet Nouvelle à conserver dans la liste $this->nouvelles
-          $nouvelle = new Nouvelle();
+          $nouvelle = new Nouvelle($this->id);
           // Modifie cette nouvelle avec l'information téléchargée
           $nouvelle->update($node);
           //var_dump($nouvelle);
           $this->nouvelles[] = $nouvelle;
 
-          $this->dateMaj = time();
+          $this->dateMaj = date("Y-m-d h:i",time());
         }
         //var_dump($nouvelles);
       }
