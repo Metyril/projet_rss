@@ -81,13 +81,13 @@ class Nouvelle {
         if($urlImageNodeList->length != 0) {
             $urlImageNodeList = $urlImageNodeList->item(0)->attributes->getNamedItem("url")->nodeValue;
             $this->image = $urlImageNodeList;
-          } else {
+            $this->downloadImage($item,self::$imageId);
+        } else {
             // Pas d'image
-            $this->urlImage = "";
+            $this->image = "";
           }
 
           //var_dump(self::$imageId);
-          $this->downloadImage($item,self::$imageId);
     }
 
     function downloadImage(DOMElement $item, $imageId) {
@@ -99,7 +99,7 @@ class Nouvelle {
             $url = $urlImageNodeList->nodeValue;
             // On construit un nom local pour cette image : on suppose que $nomLocalImage contient un identifiant unique
             // On suppose que le dossier images existe déjà
-            $imagePath = '../model/images/'.$imageId++.'.jpg'; // Pas besoin de "this"
+            $imagePath = '../model/images/flux'.$this->RSS_id."_n".$imageId++.'.jpg'; // Pas besoin de "this"
             $file = file_get_contents($url);
             // Écrit le résultat dans le fichier
             file_put_contents($imagePath, $file);

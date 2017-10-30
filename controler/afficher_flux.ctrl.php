@@ -6,7 +6,7 @@
     //$url[] = "http://www.lemonde.fr/rss/une.xml";
     //$url[] = "http://www.lemonde.fr/enseignement-superieur/rss_full.xml";
 
-    //$dao->reinit();    
+    //$dao->reinit();
 
     $url = $dao->listeUrl();
     if($url == NULL) {
@@ -32,10 +32,13 @@
         }
         $url = $dao->listeUrl();
     } else if(isset($_GET['addFlux'])) {
-        echo "ERREUR";
+        echo "/!\ Cette adresse n'est pas valide.";
     }
 
     if(isset($_GET['deleteFlux'])) {
+        foreach(glob("../model/images/flux".$_GET['deleteFlux']."_*.jpg") as $imgPath) {
+            unlink($imgPath);
+        }
         $dao->deleteListeNouvelles($_GET['deleteFlux']);
         $dao->deleteRSS($_GET['deleteFlux']);
         //unset($url[$_GET['deleteFlux']-1]);
@@ -44,6 +47,9 @@
 
     if(isset($_GET['emptyFlux'])) {
         $dao->deleteListeNouvelles($_GET['emptyFlux']);
+        foreach(glob("../model/images/flux".$_GET['deleteFlux']."_*.jpg") as $imgPath) {
+            unlink($imgPath);
+        }
         $emptyFlux = $dao->lireRSS($_GET['emptyFlux']);
         $emptyFlux->update();
         $dao->updateRSS($emptyFlux);
@@ -61,6 +67,8 @@
         foreach($updateFlux->getNouvelles() as $n) {
             $dao->createNouvelle($n, $updateFlux->getId());
             $dao->updateNouvelle($n, $updateFlux->getId());
+            //var_dump($n);
+            //var_dump($n->staticValue());
         }
     }
 
