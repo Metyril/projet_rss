@@ -13,9 +13,11 @@
         exit("Erreur ouverture BD : ".$e->getMessage());
       }
     }
+
     //////////////////////////////////////////////////////////
     // Methodes CRUD sur RSS
     //////////////////////////////////////////////////////////
+
     // Crée un nouveau flux à partir d'une URL
     // Si le flux existe déjà on ne le crée pas
     function createRSS($url) {
@@ -36,6 +38,7 @@
         return $rss;
       }
     }
+
     // Acces à un objet RSS à partir de son URL
     function readRSSfromURL($url) {
         $req = "SELECT * FROM RSS WHERE url='$url'";
@@ -47,9 +50,9 @@
           return NULL;              
         }
     }
+
     // Met à jour un flux
     function updateRSS(RSS $rss) {
-      // Met à jour uniquement le titre et la date
       $titre = $this->db->quote($rss->getTitre());
       $q = "UPDATE RSS SET titre=$titre, date='".$rss->getDate()."', dateMaj='".$rss->getDateMaj()."' WHERE url='".$rss->getUrl()."'";
       try {
@@ -62,17 +65,44 @@
       }
     }
 
+    // Supprime un flux
     function deleteRSS($RSS_id) {
       $req1 = "DELETE FROM RSS WHERE id='$RSS_id'";
       $sth1 = $this->db->exec($req1) or die (print_r($this->db->errorInfo()));
 
+      // Réinitialise l'auto-incrémentation de l'identifiant au dernier élément présent dans la base
       $req2 = "DELETE FROM sqlite_sequence WHERE name='RSS'";
       $sth2 = $this->db->exec($req2) or die (print_r($this->db->errorInfo()));
+    }
+
+    // Accès à un flux depuis son identifiant
+    function lireRSS($RSS_id) {
+      $req = "SELECT * FROM RSS where id = '$RSS_id'";
+      $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
+      $result = $sth->fetchAll(PDO::FETCH_CLASS, "RSS");
+      if (array_filter($result)) {
+        return $result[0];
+      } else {
+        return NULL;              
+      }
+    }
+
+    // Accès aux URLs des flux présents dans la base
+    function listeUrl() {
+      $req = "SELECT url FROM RSS";
+      $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
+      $result = $sth->fetchAll(PDO::FETCH_COLUMN);
+      if (array_filter($result)) {
+        return $result;
+      } else {
+        return NULL;              
+      }
     }
 
     //////////////////////////////////////////////////////////
     // Methodes CRUD sur Nouvelle
     //////////////////////////////////////////////////////////
+
     // Acces à une nouvelle à partir de son titre et l'ID du flux
     function readNouvellefromTitre($titre,$RSS_id) {
       $req = "SELECT * FROM nouvelle where titre = '$titre' and RSS_id = '$RSS_id'";
@@ -84,19 +114,15 @@
         return NULL;              
       }
     }
+
     // Crée une nouvelle dans la base à partir d'un objet nouvelle
     // et de l'id du flux auquelle elle appartient
     function createNouvelle(Nouvelle $n, $RSS_id) {
       $nouvelle = $this->readNouvellefromTitre($n->getTitre(), $RSS_id);
       if ($nouvelle == NULL) {
         try {
-          /*$q = "INSERT INTO nouvelle (titre) VALUES ('".$n->getTitre()."')";
-          $r = $this->db->exec($q);*/
-
           $req = "INSERT INTO nouvelle (titre, RSS_id) VALUES ('".$n->getTitre()."', '$RSS_id')";
           $sth = $this->db->exec($req);
-
-          //return $n;
           if ($sth == 0) {
             die("createNouvelle error: no nouvelle inserted\n");
           }
@@ -106,6 +132,7 @@
       }
     }
 
+    // Met à jour une nouvelle
     function updateNouvelle(Nouvelle $n, $RSS_id) {
       $desc = $this->db->quote($n->getDescription());
       $titre = $this->db->quote($n->getTitre());
@@ -120,31 +147,17 @@
       }
     }
 
+    // Supprime une nouvelle
     function deleteListeNouvelles($RSS_id) {
       $req1 = "DELETE FROM nouvelle WHERE RSS_id='$RSS_id'";
       $sth1 = $this->db->exec($req1) or die (print_r($this->db->errorInfo()));
 
+      // Réinitialise l'auto-incrémentation de l'identifiant au dernier élément présent dans la base
       $req2 = "DELETE FROM sqlite_sequence WHERE name='nouvelle'";
       $sth2 = $this->db->exec($req2) or die (print_r($this->db->errorInfo()));
     }
 
-
-
-
-    function reinit() {
-      $q1 = "DELETE FROM RSS WHERE id>0";
-      $r1 = $this->db->exec($q1);
-  
-      $q2 = "DELETE FROM nouvelle WHERE id>0";
-      $r2 = $this->db->exec($q2);
-  
-      $q3 = "DELETE FROM sqlite_sequence WHERE name='RSS'";
-      $r3 = $this->db->exec($q3);
-  
-      $q4 = "DELETE FROM sqlite_sequence WHERE name='nouvelle'";
-      $r4 = $this->db->exec($q4); 
-    }
-
+    // Renvoie la liste de nouvelles d'un flux
     function listeNouvelles($RSS_id) {
       $req = "SELECT * FROM nouvelle where RSS_id = '$RSS_id'";
       $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
@@ -156,6 +169,7 @@
       }
     }
 
+    // Accès à une nouvelle depuis son identifiant et celui de son flux
     function lireNouvelle($id, $RSS_id) {
       $req = "SELECT * FROM nouvelle where id = '$id' and RSS_id='$RSS_id'";
       $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
@@ -167,26 +181,29 @@
       }
     }
 
-    function lireRSS($RSS_id) {
-      $req = "SELECT * FROM RSS where id = '$RSS_id'";
-      $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
-      $result = $sth->fetchAll(PDO::FETCH_CLASS, "RSS");
-      if (array_filter($result)) {
-        return $result[0];
-      } else {
-        return NULL;              
-      }
+
+
+    // Réinitialise la base de données
+    function reinit() {
+      $q1 = "DELETE FROM RSS";
+      $r1 = $this->db->exec($q1);
+  
+      $q2 = "DELETE FROM nouvelle";
+      $r2 = $this->db->exec($q2);
+
+      $q3 = "DELETE FROM utilisateur";
+      $r3 = $this->db->exec($q3);
+  
+      $q4 = "DELETE FROM abonnement";
+      $r4 = $this->db->exec($q4);
+  
+      $q5 = "DELETE FROM sqlite_sequence WHERE name='RSS'";
+      $r5 = $this->db->exec($q5);
+  
+      $q6 = "DELETE FROM sqlite_sequence WHERE name='nouvelle'";
+      $r6 = $this->db->exec($q6); 
     }
 
-    function listeUrl() {
-      $req = "SELECT url FROM RSS";
-      $sth = $this->db->query($req) or die (print_r($this->db->errorInfo()));
-      $result = $sth->fetchAll(PDO::FETCH_COLUMN);
-      if (array_filter($result)) {
-        return $result;
-      } else {
-        return NULL;              
-      }
-    }
+
   }
 ?>

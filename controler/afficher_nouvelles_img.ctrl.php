@@ -1,4 +1,7 @@
 <?php
+
+    // Ce contrôleur est obsolète dans notre version du site
+    
     require_once('../model/DAO.class.php');
     
     $rss = new DAO();

@@ -1,14 +1,16 @@
 <?php
       require_once("../model/Nouvelle.class.php");
+
       class RSS {
-      private $id;
+      private $id;    // Identifiant du flux
       private $titre; // Titre du flux
       private $url;   // Chemin URL pour télécharger un nouvel état du flux
       private $date;  // Date du dernier téléchargement du flux
       private $nouvelles; // Liste des nouvelles du flux dans un tableau d'objets Nouvelle
-      private $dateMaj;
+      private $dateMaj;   // Date de mise à jour du flux
 
-      // Fonctions getter
+      // Fonctions getter et setter
+
       function setUrl($url) {
         $this->url = $url; 
       }
@@ -30,7 +32,9 @@
       function getDateMaj() {
         return $this->dateMaj;
       }
+
       // Récupère un flux à partir de son URL
+
       function update() {
         // Cree un objet pour accueillir le contenu du RSS : un document XML
         $doc = new DOMDocument;
@@ -50,12 +54,12 @@
           $nouvelle = new Nouvelle($this->id);
           // Modifie cette nouvelle avec l'information téléchargée
           $nouvelle->update($node);
-          //var_dump($nouvelle);
+          // Ajoute cette nouvelle dans la liste du flux
           $this->nouvelles[] = $nouvelle;
-
+          // Initialise la date de mise à jour du flux
           $this->dateMaj = date("Y-m-d h:i",time());
         }
-        //var_dump($nouvelles);
       }
+      
     }
 ?>

@@ -7,11 +7,12 @@ class Nouvelle {
     private $description; // Contenu de la nouvelle
     private $url;         // Le lien vers la ressource associée à la nouvelle
     private $image;    // URL vers l'image
-    private $RSS_id;
-    static $imageId;
+    private $RSS_id;    // L'identifiant du flux RSS
+    static $imageId;    // L'identifiant pour télécharger l'image
 
-    function __construct($RSS_id) {
+    function __construct($RSS_id) {     // Constructeur de la nouvelle
         $this->setRssId($RSS_id);
+
         if (self::$imageId == null) {
             self::$imageId = 1;
         } else {
@@ -19,7 +20,7 @@ class Nouvelle {
         }
     }
 
-    // Fonctions getter
+    // Fonctions getter et setter
 
     function getId() {
         return $this->id;
@@ -78,16 +79,15 @@ class Nouvelle {
         $this->url = $urlNodeList->textContent;
 
         $urlImageNodeList = $item->getElementsByTagName('enclosure');
+
         if($urlImageNodeList->length != 0) {
             $urlImageNodeList = $urlImageNodeList->item(0)->attributes->getNamedItem("url")->nodeValue;
             $this->image = $urlImageNodeList;
             $this->downloadImage($item,self::$imageId);
-        } else {
-            // Pas d'image
+
+        } else { // Pas d'image
             $this->image = "";
           }
-
-          //var_dump(self::$imageId);
     }
 
     function downloadImage(DOMElement $item, $imageId) {

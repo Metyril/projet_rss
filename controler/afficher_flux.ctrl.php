@@ -2,87 +2,81 @@
     require_once('../model/DAO.class.php');
     $dao = new DAO();
 
-    //$url[] = "http://www.lemonde.fr/m-actu/rss_full.xml";
-    //$url[] = "http://www.lemonde.fr/rss/une.xml";
-    //$url[] = "http://www.lemonde.fr/enseignement-superieur/rss_full.xml";
+    //$dao->reinit();   // Réinitialisation de la base en cas de problème
 
-    //$dao->reinit();
-
-    $url = $dao->listeUrl();
-    if($url == NULL) {
-        $url = "http://www.lemonde.fr/rss/une.xml";
-        $addFlux = $dao->createRSS($url);
-        $addFlux->update();
-        $dao->updateRSS($addFlux);
-        foreach($addFlux->getNouvelles() as $n) {
-            $dao->createNouvelle($n, $addFlux->getId());
-            $dao->updateNouvelle($n, $addFlux->getId());
-        }
-        $url = $dao->listeUrl();
-    }
-
-    if(isset($_GET['addFlux']) && substr($_GET['addFlux'], 0, 22) == "http://www.lemonde.fr/" && substr($_GET['addFlux'], -13, 13) == "/rss_full.xml") {
-        //$url[] = $_GET['addFlux'];
+    // Ajout d'un flux par URL et vérification de sa validité
+    if(isset($_GET['addFlux']) && substr($_GET['addFlux'], 0, 22) == "http://www.lemonde.fr/" && substr($_GET['addFlux'], -4, 4) == ".xml") {
         $addFlux = $dao->createRSS($_GET['addFlux']);
         $addFlux->update();
         $dao->updateRSS($addFlux);
+
         foreach($addFlux->getNouvelles() as $n) {
             $dao->createNouvelle($n, $addFlux->getId());
             $dao->updateNouvelle($n, $addFlux->getId());
         }
         $url = $dao->listeUrl();
-    } else if(isset($_GET['addFlux'])) {
+    } else if(isset($_GET['addFlux'])) {    // Envoi d'une erreur à l'utilisateur pour les liens non valides
         echo "/!\ Cette adresse n'est pas valide.";
     }
 
+    // Supression d'un flux passé en paramètre, ainsi que de ses nouvelles et leurs images associées
     if(isset($_GET['deleteFlux'])) {
         foreach(glob("../model/images/flux".$_GET['deleteFlux']."_*.jpg") as $imgPath) {
             unlink($imgPath);
         }
+
         $dao->deleteListeNouvelles($_GET['deleteFlux']);
         $dao->deleteRSS($_GET['deleteFlux']);
-        //unset($url[$_GET['deleteFlux']-1]);
         $url = $dao->listeUrl();
     }
 
+    // Vide un flux passé en paramètre et ne conserve que les dernières nouvelles et images
     if(isset($_GET['emptyFlux'])) {
         $dao->deleteListeNouvelles($_GET['emptyFlux']);
         foreach(glob("../model/images/flux".$_GET['deleteFlux']."_*.jpg") as $imgPath) {
             unlink($imgPath);
         }
+
         $emptyFlux = $dao->lireRSS($_GET['emptyFlux']);
         $emptyFlux->update();
         $dao->updateRSS($emptyFlux);
-        //var_dump($updateFlux);
+
         foreach($emptyFlux->getNouvelles() as $n) {
             $dao->createNouvelle($n, $emptyFlux->getId());
             $dao->updateNouvelle($n, $emptyFlux->getId());
         }
     }
 
+    // Mise à jour des nouvelles d'un flux passé en paramètre
     if(isset($_GET['updateFlux'])) {
         $updateFlux = $dao->lireRSS($_GET['updateFlux']);
         $updateFlux->update();
         $dao->updateRSS($updateFlux);
+
         foreach($updateFlux->getNouvelles() as $n) {
             $dao->createNouvelle($n, $updateFlux->getId());
             $dao->updateNouvelle($n, $updateFlux->getId());
-            //var_dump($n);
-            //var_dump($n->staticValue());
         }
     }
 
-    $i = 1;
+    // Récupération des fluxs existants dans la base
+    $url = $dao->listeUrl();
+    if($url == NULL) {      // S'il n'y a pas de fluxs préexistants, on en crée un par défaut
+        $url = "http://www.lemonde.fr/rss/une.xml";
+        $addFlux = $dao->createRSS($url);
+        $addFlux->update();
+        $dao->updateRSS($addFlux);
+
+        foreach($addFlux->getNouvelles() as $n) {
+            $dao->createNouvelle($n, $addFlux->getId());
+            $dao->updateNouvelle($n, $addFlux->getId());
+        }
+        $url = $dao->listeUrl();
+    }
+
+    // Récupération des fluxs RSS et envoie à la vue
     foreach($url as $u) {
-        /*$fluxs[$i] = $dao->createRSS($u);
-        $fluxs[$i]->update();
-        $dao->updateRSS($fluxs[$i]);
-        foreach($fluxs[$i]->getNouvelles() as $n) {
-            $dao->createNouvelle($n, $fluxs[$i]->getId());
-            $dao->updateNouvelle($n, $fluxs[$i]->getId());
-        }*/
-        $fluxs[$i] = $dao->readRSSfromURL($u);
-        $i ++;
+        $fluxs[] = $dao->readRSSfromURL($u);
     }
 
 include("../view/afficher_flux.view.php");
