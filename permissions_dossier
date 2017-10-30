@@ -1,0 +1,10 @@
+#!/bin/bash
+
+setup-public-html
+chmod -R o+rw index.php
+chmod -R o+rw controler/
+chmod -R o+rw model/
+chmod -R o+rw view/
+cd model/
+chmod -R o+rw data/
+chmod -R o+rw images/
