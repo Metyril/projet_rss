@@ -1,0 +1,43 @@
+body {
+  background: rgba(132, 204, 255, 0.3);
+}
+h1 {
+  text-align: center;
+  font-size: 400%;
+}
+h2{
+  text-align: left;
+  padding-left: 15%;
+}
+ul{
+  padding-left: 15%;
+}
+li{
+  color: grey;
+  list-style-type: none;
+  display: inline-block;
+}
+li>a{
+  color: grey;
+  text-decoration: none;
+}
+form{
+  padding-left: 15%;
+}
+div{
+  width: 70%;
+  margin-left: 15%;
+}
+img{
+  padding: 0;
+  margin : 0;
+  width: 100%
+}
+body>div>a{
+  background-color: rgba(160,160,160,0.5);
+  border-radius: 10px;
+  padding: 1%;
+  margin: 0.5%;
+  display: inline-block;
+  width: 30%;
+}

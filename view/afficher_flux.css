@@ -1,0 +1,34 @@
+body {
+  background: rgba(132, 204, 255, 0.3);
+}
+h1 {
+  text-align: center;
+  font-size: 400%;
+}
+h2{
+  text-align: left;
+  padding-left: 15%;
+}
+ul{
+  padding-left: 15%;
+}
+li{
+  color: grey;
+  list-style-type: none;
+  display: inline-block;
+}
+#ajout_RSS{
+  width: 70%;
+  align-items: center;
+  padding: 0% 15% 0% 15%;
+}
+form{
+  display: inline-block;
+  margin-bottom: 0%;
+}
+div{
+  background-color: rgba(160,160,160,0.5);
+  margin: 2% 15% 0% 15%;
+  border-radius: 10px 20px 0px 20px;
+  padding: 1%;
+}

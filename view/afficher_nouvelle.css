@@ -1,0 +1,44 @@
+body {
+  background: rgba(132, 204, 255, 0.3);
+}
+h1 {
+  text-align: center;
+  font-size: 400%;
+}
+h2 {
+  text-align: left;
+  padding-left: 15%;
+}
+ul{
+  padding-left: 15%;
+}
+li{
+  color: grey;
+  list-style-type: none;
+  display: inline-block;
+}
+li>a{
+  color: grey;
+  text-decoration: none;
+}
+div{
+  width: 68%;
+  margin: 0% 15% 0% 15%;
+  padding: 1% 0% 1% 2%;
+  background-color: rgba(160,160,160,0.5);
+  border-radius: 30px;
+}
+img{
+  width: 75%;
+  display: block;
+  padding-left: 12.5%;
+}
+div>a{
+  text-align: right;
+  display: block;
+  margin: 1% 10% 0% 0%;
+}
+
+p{
+  margin: 0% 10%;
+}

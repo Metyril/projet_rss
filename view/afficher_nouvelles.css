@@ -1,0 +1,33 @@
+body {
+  background: rgba(132, 204, 255, 0.3);
+}
+h1 {
+  text-align: center;
+  font-size: 400%;
+}
+h2{
+  text-align: left;
+  padding-left: 15%;
+}
+ul{
+  padding-left: 15%;
+}
+li{
+  color: grey;
+  list-style-type: none;
+  display: inline-block;
+}
+li>a{
+  color: grey;
+  text-decoration: none;
+}
+form{
+  padding-left: 15%;
+}
+body>a{
+  background-color: rgba(160,160,160,0.5);
+  margin: 0% 15% 0% 15%;
+  border-radius: 10px 20px 0px 20px;
+  padding: 0.5%;
+  display: block;
+}

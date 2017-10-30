@@ -3,15 +3,18 @@
 <title>Flux RSS</title>
 <meta charset="UTF-8"/>
 <meta http-equiv="content-type" content="text/html;" />
+<link rel="stylesheet" href="../view/afficher_nouvelles.css"/>
 </head>
 
 <body>
-  <header>
-        <h1>Liste des nouvelles (Affichage textuel)</h1>
+    <header>
+        <h1>Flux RSS</h1>
     </header>
 
+    <h2>Liste des nouvelles (Affichage textuel)</h2>
     <ul id="navigation">      <!-- Menu en fil d'ariane -->
         <li><a href="afficher_flux.ctrl.php" title="Liste des fluxs">Liste des fluxs</a></li>
+        <li>→</li>
         <li>Liste des nouvelles</li>
     </ul>
 
